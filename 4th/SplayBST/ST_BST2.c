@@ -93,3 +93,16 @@ void sortR(link h, void (*visit)(Item))
 }
 void STsort(void (*visit)(Item))
 { sortR(head, visit); } 
+
+void STshow(link h, int l)
+{
+  int i=0;
+  if(h != NULL){
+  STshow(h->r, l+1);
+  for(i=0; i<l; i++) printf("\t");
+  printf("(%d,%d)\n",key(h->item), h->N);
+  STshow(h->l, l+1);
+  }
+}
+
+void STshowAll() {STshow(head, 0);} 
