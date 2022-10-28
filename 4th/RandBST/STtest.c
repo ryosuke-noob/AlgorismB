@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "Item.h"
 #include "ST.h"
 
 int main(int argc, char *argv[])
 {  int N, M, maxN = atoi(argv[1]), sw = atoi(argv[2]);
   Key v; Item item;
-  STinit(maxN); srand(1);
+  STinit(maxN); srand((unsigned int)time(NULL));
   for (M = 0, N = 0; N < maxN; N++)
     {
       if (sw == 1) v = ITEMrand();
@@ -19,5 +20,6 @@ int main(int argc, char *argv[])
   STsort(ITEMshow); printf("\n");
   printf("%d keys ", N);
   printf("%d distinct keys\n", STcount());
+  STshowAll();
   return 0;
 }
