@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "Item.h"
 typedef struct STnode* link;
 struct STnode { Item item; link l, r; int N; };
