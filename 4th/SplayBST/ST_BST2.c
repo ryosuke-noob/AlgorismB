@@ -61,23 +61,26 @@ link rotL(link h)
 link splay (link h, Item item)
 {
   Key v = key (item);
+  Item tmp;
   if (h == z)
     return NEW (item, z, z, 1);
   if (less (v, key (h->item)))
   {
     if (h->l == z)
 	    return NEW (item, z, h, h->N + 1);//simple rotR
-    if (less (v, key (h->l->item)))
+    tmp = searchR(h->l, v);//ex2
+    if (tmp.key == NULLitem.key)
     {
       h->l->N++;
       h->N++;
+    }
+    if (less (v, key (h->l->item)))
+    {
       h->l->l = splay (h->l->l, item);
       h = rotR (h);
     }
     else if (less (key (h->l->item), v))//ex2
 	  {
-      h->l->N++;
-      h->N++;
       h->l->r = splay (h->l->r, item);
       h->l = rotL (h->l);
     }
@@ -87,17 +90,19 @@ link splay (link h, Item item)
   {
     if (h->r == z)
       return NEW (item, h, z, h->N + 1);//simple rotL
-    if (less (key (h->r->item), v))
+    tmp = searchR(h->r, v);//ex2
+    if (tmp.key == NULLitem.key)
     {
       h->r->N++;
       h->N++;
+    }
+    if (less (key (h->r->item), v))
+    {
       h->r->r = splay (h->r->r, item);
       h = rotL (h);
     }
     else if (less (v, key (h->r->item)))//ex2
     {
-      h->r->N++;
-      h->N++;
       h->r->l = splay (h->r->l, item);
       h->r = rotR (h->r);
     }
