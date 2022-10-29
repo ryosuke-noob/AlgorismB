@@ -4,14 +4,18 @@
 typedef struct STnode* link;
 struct STnode { Item item; link l, r; int N; };
 static link head, z;
+
 link NEW(Item item, link l, link r, int N)
 { link x = malloc(sizeof *x); 
   x->item = item; x->l = l; x->r = r; x->N = N;
   return x;
 }
+
 void STinit()
 { head = (z = NEW(NULLitem, 0, 0, 0)); }
+
 int STcount(void) { return head->N; }
+
 Item searchR(link h, Key v)
 { Key t = key(h->item);
   if (h == z) return NULLitem;
@@ -19,6 +23,7 @@ Item searchR(link h, Key v)
   if less(v, t) return searchR(h->l, v);
   else return searchR(h->r, v);
 }
+
 Item STsearch(Key v) 
 { return searchR(head, v); } 
 
@@ -62,38 +67,43 @@ link splay (link h, Item item)
   {
     if (h->l == z)
 	    return NEW (item, z, h, h->N + 1);//simple rotR
-    h->l->N++;
-    h->N++;
     if (less (v, key (h->l->item)))
     {
+      h->l->N++;
+      h->N++;
       h->l->l = splay (h->l->l, item);
       h = rotR (h);
     }
-    else
+    else if (less (key (h->l->item), v))//ex2
 	  {
+      h->l->N++;
+      h->N++;
       h->l->r = splay (h->l->r, item);
       h->l = rotL (h->l);
     }
     return rotR (h);
   }
-  else
+  else  if (less (key (h->item), v))
   {
     if (h->r == z)
       return NEW (item, h, z, h->N + 1);//simple rotL
-    h->r->N++;
-    h->N++;
     if (less (key (h->r->item), v))
     {
+      h->r->N++;
+      h->N++;
       h->r->r = splay (h->r->r, item);
       h = rotL (h);
     }
-    else
+    else if (less (v, key (h->r->item)))//ex2
     {
+      h->r->N++;
+      h->N++;
       h->r->l = splay (h->r->l, item);
       h->r = rotR (h->r);
     }
     return rotL (h);
   }
+  return h;
 }
 
 void STinsert (Item item)
@@ -108,6 +118,7 @@ void sortR(link h, void (*visit)(Item))
   visit(h->item); 
   sortR(h->r, visit);
 }
+
 void STsort(void (*visit)(Item))
 { sortR(head, visit); } 
 
