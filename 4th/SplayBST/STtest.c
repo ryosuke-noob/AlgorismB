@@ -13,7 +13,8 @@ int main(int argc, char *argv[])
       if (sw == 1) v = ITEMrand();
       else if (sw == 2) v = N+1;
       else if (ITEMscan(&v) == EOF) break;
-      item = STsearch(v); if (item.key != NULLitem.key) continue;
+      // ex2
+      // item = STsearch(v); if (item.key != NULLitem.key) continue;
       key(item) = v;
       STinsert(item); M++;
     }

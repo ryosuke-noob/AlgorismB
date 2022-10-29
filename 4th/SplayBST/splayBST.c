@@ -1,3 +1,9 @@
+#include "Item.h"
+#include "ST.h"
+typedef struct STnode* link;
+struct STnode { Item item; link l, r; int N; };
+static link head, z;
+
 link splay (link h, Item item)
 {
   Key v = key (item);

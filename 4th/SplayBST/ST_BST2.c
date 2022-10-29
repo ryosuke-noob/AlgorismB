@@ -23,23 +23,35 @@ Item STsearch(Key v)
 { return searchR(head, v); } 
 
 link rotR(link h)
-{ link x = h->l; h->l = x->r; x->r = h; 
-  return x; }
+{
+  link x = h->l;
+  h->N -= x->l->N + 1;
+  x->N += h->r->N + 1;
+  h->l = x->r;
+  x->r = h;
+  return x;
+}
+
 link rotL(link h)
-{ link x = h->r; h->r = x->l; x->l = h; 
-  return x; }
+{
+  link x = h->r;
+  h->N -= x->r->N + 1;
+  x->N += h->l->N + 1;
+  h->r = x->l;
+  x->l = h;
+  return x;
+}
 
 // link insertT(link h, Item item)
 // { Key v = key(item);
 //   if (h == z) return NEW(item, z, z, 1); 
+//   h->N++;
 //   if (less(v, key(h->item))) 
 //     { h->l = insertT(h->l, item); h = rotR(h); }
 //   else
 //     { h->r = insertT(h->r, item); h = rotL(h); }
 //   return h;
 // }
-// void STinsert(Item item)
-// { head = insertT(head, item); }
 
 link splay (link h, Item item)
 {
@@ -47,37 +59,41 @@ link splay (link h, Item item)
   if (h == z)
     return NEW (item, z, z, 1);
   if (less (v, key (h->item)))
+  {
+    if (h->l == z)
+	    return NEW (item, z, h, h->N + 1);
+    h->l->N++;
+    h->N++;
+    if (less (v, key (h->l->item)))
     {
-      if (h->l == z)
-	return NEW (item, z, h, h->N + 1);
-      if (less (v, key (h->l->item)))
-	{
-	  h->l->l = splay (h->l->l, item);
-	  h = rotR (h);
-	}
-      else
-	{
-	  h->l->r = splay (h->l->r, item);
-	  h->l = rotL (h->l);
-	}
-      return rotR (h);
+      h->l->l = splay (h->l->l, item);
+      h = rotR (h);
     }
+    else
+	  {
+      h->l->r = splay (h->l->r, item);
+      h->l = rotL (h->l);
+    }
+    return rotR (h);
+  }
   else
+  {
+    if (h->r == z)
+      return NEW (item, h, z, h->N + 1);
+    h->r->N++;
+    h->N++;
+    if (less (key (h->r->item), v))
     {
-      if (h->r == z)
-	return NEW (item, h, z, h->N + 1);
-      if (less (key (h->r->item), v))
-	{
-	  h->r->r = splay (h->r->r, item);
-	  h = rotL (h);
-	}
-      else
-	{
-	  h->r->l = splay (h->r->l, item);
-	  h->r = rotR (h->r);
-	}
-      return rotL (h);
+      h->r->r = splay (h->r->r, item);
+      h = rotL (h);
     }
+    else
+    {
+      h->r->l = splay (h->r->l, item);
+      h->r = rotR (h->r);
+    }
+    return rotL (h);
+  }
 }
 
 void STinsert (Item item)
