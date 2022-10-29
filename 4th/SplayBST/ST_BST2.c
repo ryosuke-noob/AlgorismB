@@ -61,7 +61,7 @@ link splay (link h, Item item)
   if (less (v, key (h->item)))
   {
     if (h->l == z)
-	    return NEW (item, z, h, h->N + 1);
+	    return NEW (item, z, h, h->N + 1);//simple rotR
     h->l->N++;
     h->N++;
     if (less (v, key (h->l->item)))
@@ -79,7 +79,7 @@ link splay (link h, Item item)
   else
   {
     if (h->r == z)
-      return NEW (item, h, z, h->N + 1);
+      return NEW (item, h, z, h->N + 1);//simple rotL
     h->r->N++;
     h->N++;
     if (less (key (h->r->item), v))
